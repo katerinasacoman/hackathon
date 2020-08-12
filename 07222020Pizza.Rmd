@@ -1,0 +1,57 @@
+---
+title: "07222020Pizza"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+library(tidyverse)
+MTA<-(X072020NYCMTAJuly2014)
+View(MTA)
+
+P3 <- (X2014_NYC_Slice_Prices_by_MTA_Station)
+view(P3)
+
+PizzaPrincipleTrue <- {P3 %>%
+    filter(Mean == "2.5")}
+View(PizzaPrincipleTrue)
+
+PizzaPrincipleFalse <- {P3 %>%
+    filter(Mean != "2.5")}
+View(PizzaPrincipleFalse)
+
+MTA %>%
+  #group_by() %>%
+  select(everything()) %>%
+  summarise_all(funs(sum(is.na(.)))) %>%
+  pivot_longer(cols = 1:13, names_to = 'columns', values_to = 'NA_count') %>%
+  arrange(desc(NA_count)) %>%
+  ggplot(aes(y = columns, x = NA_count)) + geom_col(fill = '#F0E442') +
+  geom_label(aes(label = NA_count)) +
+  #   scale_fill_manual(values = c("darkorange","purple","cyan4")) +
+  theme_minimal() +
+  labs(title = 'MTA Stations W/ The Missing Days of Ticket Sales',
+       x = "Number of Days Missing Ticket Sales",
+       y = "MTA Station")
